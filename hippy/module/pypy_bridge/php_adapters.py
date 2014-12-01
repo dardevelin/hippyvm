@@ -317,12 +317,16 @@ class W_PHPRefAdapter(W_Root):
                 w_py_key.to_php(interp), w_py_val.to_php(interp))
 
     def descr_as_list(self, space):
+        w_php_ref_deref = self.w_php_ref.deref_temp()
         from hippy.objects.arrayobject import W_ArrayObject
-        w_php_ref = self.w_php_ref
-        w_py_val = w_php_ref.to_py(self.interp)
-        w_py_as_list = space.getattr(w_py_val, space.wrap("as_list"))
-        from pypy.interpreter.argument import Arguments
-        return space.call_args(w_py_as_list, Arguments(space, []))
+        if not isinstance(w_php_ref_deref, W_ArrayObject):
+            _raise_py_bridgeerror(self.interp.py_space,
+                    "Cannot invoke as_list() on non-array reference")
+        return self
+
+    def descr_append(self, w_py_val):
+        interp = self.interp
+        self.w_php_ref.append_ref(interp.space, w_py_val.to_php(interp))
 
     # binary ops
     def _descr_generic_binop(self, name, w_other):
@@ -376,6 +380,7 @@ w_phprefadapter_typedef = {
     "__new__": interp2app(W_PHPRefAdapter.descr_new),
     "__getattr__": interp2app(W_PHPRefAdapter.descr_get),
     "__setitem__": interp2app(W_PHPRefAdapter.descr_setitem),
+    "append": interp2app(W_PHPRefAdapter.descr_append),
     "as_list": interp2app(W_PHPRefAdapter.descr_as_list),
     "store_ref": interp2app(W_PHPRefAdapter.store_ref),
     "deref": interp2app(W_PHPRefAdapter.deref),

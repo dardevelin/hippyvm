@@ -230,9 +230,10 @@ class ObjSpace(object):
     def uminusminus(self, w_v):
         return w_v.deref().uminusminus(self)
 
-    def getitem(self, w_obj, w_item, give_notice=False):
+    def getitem(self, w_obj, w_item, give_notice=False, allow_undefined=True):
         return w_obj.deref_temp().getitem(self, w_item.deref(),
-                                          give_notice=give_notice)
+                                          give_notice=give_notice,
+                                          allow_undefined=allow_undefined)
 
     def setitem(self, w_obj, w_item, w_newvalue):
         # Warning: this API always makes a copy of the string or array.

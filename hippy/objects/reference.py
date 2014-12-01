@@ -86,6 +86,12 @@ class W_Reference(W_Root):
         if w_new is not w_obj:
             self.store(w_new, unique=True)
 
+    def append_ref(self, space, r_value):
+        w_obj = self.deref_unique()
+        w_new = space.appenditem_maybe_inplace(w_obj, r_value)
+        if w_new is not w_obj:
+            self.store(w_new, unique=True)
+
     def unsetitem(self, space, w_index):
         w_obj = self.deref_unique()
         w_new = w_obj._unsetitem(space, w_index)

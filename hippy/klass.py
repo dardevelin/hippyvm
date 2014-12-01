@@ -1215,6 +1215,9 @@ class W_BoundMethod(AbstractFunction):
                                           w_this=self.w_instance,
                                           thisclass=thisclass)
 
+    def is_py_call(self):
+        return self.method_func.is_py_call()
+
 class W_UnderUnderCall(AbstractFunction):
     def __init__(self, name, call_func):
         self.name = name

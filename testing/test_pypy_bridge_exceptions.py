@@ -369,7 +369,7 @@ class TestPyPyBridgeExceptions(BaseTestInterpreter):
                 try:
                     x.as_list()
                     return "fail"
-                except AttributeError as e:
+                except BridgeError as e:
                     return e.message
             EOD;
 
@@ -377,6 +377,6 @@ class TestPyPyBridgeExceptions(BaseTestInterpreter):
             $a = 1;
             echo($f($a));
         ''')
-        err_s = "'int' object has no attribute 'as_list'"
+        err_s = "Cannot invoke as_list() on non-array reference"
         assert php_space.str_w(output[0]) == err_s
 

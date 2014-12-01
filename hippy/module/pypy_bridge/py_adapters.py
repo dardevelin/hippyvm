@@ -93,7 +93,6 @@ class W_EmbeddedPyCallable(W_InvokeCall):
     @jit.unroll_safe
     def call_args(self, interp, args_w,
             w_this=None, thisclass=None, closureargs=None):
-
         py_space = interp.py_space
 
         w_py_args_elems = [ x.to_py(interp) for x in args_w ]
